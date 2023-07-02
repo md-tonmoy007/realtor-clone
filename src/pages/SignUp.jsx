@@ -2,6 +2,16 @@ import React, { useState } from 'react'
 import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
 import OAuth from '../components/OAuth';
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
+import { db } from "../firebase";
+import { doc, serverTimestamp, setDoc } from 'firebase/firestore';
+import { toast } from 'react-toastify';
+
+
 
 export default function SignUp() {
   const [showPass, setShowPass] = useState(false)
@@ -11,6 +21,7 @@ export default function SignUp() {
     password: "",
   });
   const { name, email, password } = formData;
+  const navigate = useNavigate();
 
 
   function onChange(e){
@@ -20,6 +31,33 @@ export default function SignUp() {
     }));
   }
 
+  async function onSubmit(e) {
+    e.preventDefault();
+
+    try {
+      const auth = getAuth();
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+      updateProfile(auth.currentUser, {
+        displayName: name,
+      });
+      const user = userCredential.user;
+      const formDataCopy = { ...formData };
+      // delete formDataCopy.password;
+      formDataCopy.timestamp = serverTimestamp();
+
+      await setDoc(doc(db, "users", user.uid), formDataCopy);
+      toast.success("Sign up was successful");
+      navigate("/");
+    } catch (error) {
+      console.log(error)
+      toast.error("Something went wrong with the registration");
+    }
+  }
 
   return (
     <section>
@@ -33,7 +71,7 @@ export default function SignUp() {
             />
           </div>
           <div className="w-full md:w-[67%] lg:w-[40%] lg:ml-20">
-            <form>
+            <form onSubmit={onSubmit}>
             <input
                 type="text"
                 id="name"
