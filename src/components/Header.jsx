@@ -47,7 +47,7 @@ export default function Header() {
               style={pathMatchRoute("/signin")?{borderBottom: "5px red solid", color:"black"}: {borderBottom: "transparent"}}
                 className={`cursor-pointer py-3 text-sm font-semibold text-gray-400 border-b-[3px] border-b-transparent 
                 ${pathMatchRoute("/signin") && "text-black border-b-red-500"}`}
-                onClick={() => navigate("/signin")}
+                onClick={() => navigate("/sign-in")}
               >
                 Sign in
               </li>
