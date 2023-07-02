@@ -8,6 +8,7 @@ export default function OAuth() {
   const navigate = useNavigate();
   async function onGoogleClick() {
     try {
+
       const auth = getAuth();
       const provider = new GoogleAuthProvider();
       const result = await signInWithPopup(auth, provider);
@@ -25,8 +26,10 @@ export default function OAuth() {
           timestamp: serverTimestamp(),
         });
       }
-
+      
+      toast.success(`Welcome ${user.displayName}`)
       navigate("/");
+
     } catch (error) {
       toast.error("Could not authorize with Google");
     }
