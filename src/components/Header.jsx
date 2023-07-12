@@ -34,7 +34,7 @@ export default function Header() {
                 }`}
                 onClick={() => navigate("/")}
               >
-                Home
+                Homies
               </li>
               <li
                 style={pathMatchRoute("/offers")?{borderBottom: "5px red solid", color:"black"}: {borderBottom: "transparent"}}
